@@ -10,6 +10,7 @@ SECRET_KEY = 'django-insecure-s7sx1et7l_@vdku4-s9%!e7-1i^ktvkd(teu2xh*g)wb3#4=l2
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 DEBUG = True
 ALLOWED_HOSTS = ['*']
+ASGI_APPLICATION = 'petTrack.asgi.application'
 
 # Aplicaciones instaladas en el proyecto
 INSTALLED_APPS = [
@@ -20,7 +21,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'usuarios',
-    'mascota'
+    'mascota',
+    'channels',
 ]
 
 # Middlewares utilizados en el proyecto
@@ -56,6 +58,12 @@ TEMPLATES = [
 
 # Configuración de la aplicación WSGI
 WSGI_APPLICATION = 'petTrack.wsgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 # Configuración de la base de datos
 DATABASES = {
@@ -112,3 +120,16 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_SUBJECT_PREFIX = '[My Website]'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_SSL = False
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}

@@ -21,6 +21,10 @@ from .token import token_activacion
 from django.contrib.auth.views import PasswordResetView
 import folium
 from folium.plugins import MarkerCluster
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.views.decorators.http import require_GET
 
 class BienvenidaView(TemplateView):
     """
@@ -236,3 +240,23 @@ def homepage(request):
 
     context = {'map': initialMap._repr_html_(), 'locations': locations}
     return render(request, 'home.html', context)
+
+# Nueva vista para manejar mensajes del Arduino
+@require_GET
+def arduino_view(request):
+    message = request.GET.get('message', 'Hola no recibido')
+    # Puedes agregar el mensaje al contexto de la vista 'homepage'
+    context = {'arduino_message': message}
+    return homepage(request)
+
+@csrf_exempt
+def arduino_data(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            message = data.get('message', '')
+            print("Mensaje recibido:", message)
+            return JsonResponse({'status': 'success', 'message': message})
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

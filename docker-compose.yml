@@ -11,7 +11,7 @@ services:
       - db
     ports:
       - 8000:8000
-    volumes: 
+    volumes:
       - ./petTrackMx/:/app
 
   db:
@@ -27,7 +27,6 @@ services:
       - db:/var/lib/mysql
     ports:
       - 3310:3306
- 
-volumes:
-  db:    
 
+volumes:
+  db:

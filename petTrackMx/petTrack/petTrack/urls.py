@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
-# Importa las vistas de la aplicación 'usuarios'
-from usuarios import views
+from django.core.asgi import get_asgi_application
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+from usuarios.routing import websocket_urlpatterns
 
 # Definición de las URL principales del proyecto
 urlpatterns = [
@@ -21,3 +22,14 @@ urlpatterns = [
 # Añade rutas para servir archivos estáticos y media en modo DEBUG
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Configuración del enrutador de protocolos para manejar WebSocket
+#application = ProtocolTypeRouter({
+    # (http->django views is added by default)
+#    "http": get_asgi_application(),
+#    "websocket": AuthMiddlewareStack(
+#        URLRouter(
+#            websocket_urlpatterns
+#        )
+#    ),
+#})

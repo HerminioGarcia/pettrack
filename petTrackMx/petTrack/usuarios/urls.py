@@ -20,7 +20,9 @@ urlpatterns = [
     path('Encargado', login_required(views.CrearPerfilView.as_view()), name='perfil'),
     path('EncargadoEditar', login_required(views.EditarPerfilView.as_view()), name='perfilEditar'),
     path('',login_required(views.homepage), name = 'bienvenida'),
-    
+    path('arduino_data/', views.arduino_data, name='arduino_data'),
+# Ruta para recibir mensajes del Arduino
+    path('arduino/', views.arduino_view, name='arduino_view'),
     path('restablecer_contrasena/', CustomPasswordResetView.as_view(), name='password_reset1'),
     path('restablecer-contrasena/hecho/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name='password_reset_done'),
     path('restablecer-contrasena/confirmar/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'), name='password_reset_confirm'),
