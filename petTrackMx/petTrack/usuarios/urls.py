@@ -2,7 +2,7 @@ from django.urls import path, re_path, include
 from usuarios import views
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.decorators import login_required
-from .views import CustomPasswordResetView
+from .views import CustomPasswordResetView, arduino_data
 from django.contrib.auth import views as auth_views
 
 #app_name = 'usuarios'
@@ -20,7 +20,7 @@ urlpatterns = [
     path('Encargado', login_required(views.CrearPerfilView.as_view()), name='perfil'),
     path('EncargadoEditar', login_required(views.EditarPerfilView.as_view()), name='perfilEditar'),
     path('',login_required(views.homepage), name = 'bienvenida'),
-    path('arduino_data/', views.arduino_data, name='arduino_data'),
+    path('arduino_data/', arduino_data, name='arduino_data'),
 # Ruta para recibir mensajes del Arduino
     path('arduino/', views.arduino_view, name='arduino_view'),
     path('restablecer_contrasena/', CustomPasswordResetView.as_view(), name='password_reset1'),

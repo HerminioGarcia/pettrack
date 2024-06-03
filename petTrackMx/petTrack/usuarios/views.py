@@ -251,12 +251,13 @@ def arduino_view(request):
 
 @csrf_exempt
 def arduino_data(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             data = json.loads(request.body)
-            message = data.get('message', '')
-            print("Mensaje recibido:", message)
-            return JsonResponse({'status': 'success', 'message': message})
+            # Procesa los datos aquí
+            print(f"Datos recibidos: {data}")
+            return JsonResponse({"status": "success", "message": "Datos recibidos correctamente"})
         except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'})
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+            return JsonResponse({"status": "error", "message": "JSON no válido"}, status=400)
+    else:
+        return JsonResponse({"status": "error", "message": "Método no permitido"}, status=405)
