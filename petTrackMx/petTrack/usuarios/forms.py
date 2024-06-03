@@ -6,41 +6,28 @@ from django.core.exceptions import ValidationError
 from .models import DatosPersonales
 
 class UserForm(forms.ModelForm):
-    """
-    Formulario para el registro de usuarios, incluye confirmación de contraseña.
-    """
-    repassword = forms.CharField(widget=forms.PasswordInput(), label="Repetir contraseña")
+    repassword = forms.CharField()
     
     class Meta:
         model = User
         fields = ('username', 'password', 'email', 'repassword')
-
-    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    username = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-
+   
+    email = forms.EmailField(required=True)
+    username = forms.CharField(required=True)
     def save(self, commit=True):
-        """
-        Sobrescribe el método save para manejar el almacenamiento del usuario con la contraseña encriptada.
-        """
         user = super(UserForm, self).save(commit=False)
         user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
         return user
-
-    def clean_password(self):
-        """
-        Valida que las contraseñas coincidan.
-        """
-        if self.cleaned_data['password'] != self.cleaned_data['repassword']:
-            raise ValidationError('Las contraseñas son diferentes; favor de verificar')
-        return self.cleaned_data['password']
-
+   
+    def clean_password(self, *args, **kwargs):
+        if self.data['password'] != self.data['repassword']:
+            raise forms.ValidationError('Las contraseñas son diferentes; favor de verificar')
+       
+        return self.data['password']
+   
     def clean_username(self):
-        """
-        Valida que el nombre de usuario sea único.
-        """
         username = self.cleaned_data['username']
         if User.objects.filter(username=username).exists():
             raise ValidationError("Este nombre de usuario ya está en uso.")

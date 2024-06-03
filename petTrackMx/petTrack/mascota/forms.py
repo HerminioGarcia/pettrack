@@ -18,4 +18,5 @@ class MascotaForm(forms.ModelForm):
             'especie': forms.TextInput(attrs={'class': 'form-control'}),  # Text input con clase 'form-control'
             'raza': forms.TextInput(attrs={'class': 'form-control'}),  # Text input con clase 'form-control'
             'edad': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input con clase 'form-control'
+            'numero_telefono': forms.NumberInput(attrs={'class': 'form-control'}),  # Text input con clase 'form-control' y longitud máxima de 10
         }
