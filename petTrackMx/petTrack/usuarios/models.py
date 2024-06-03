@@ -24,7 +24,7 @@ class DatosPersonales(models.Model):
     nombre = models.CharField("Nombres", max_length=300, null=True, blank=True)
     apellidos = models.CharField("Apellidos", max_length=300, null=True, blank=True)
     genero = models.CharField('Género', max_length=1, choices=GENERO, default=1, null=True, blank=True)
-    imag_perfil = models.ImageField('', upload_to='imagenes_usuarios/', validators=[imagen_validador], null=True, blank=True)
+    imag_perfil = models.ImageField('Foto de perfil', upload_to='imagenes_usuarios/', validators=[imagen_validador], null=True, blank=True)
 
 class Location(models.Model):
     """

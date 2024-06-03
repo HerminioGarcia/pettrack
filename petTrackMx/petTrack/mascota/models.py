@@ -17,7 +17,6 @@ class Mascota(models.Model):
         "Número de Teléfono para el arduino",
         max_length=10,
         unique=True,
-        validators=[validar_numero_telefono],
     )
 
     def __str__(self):

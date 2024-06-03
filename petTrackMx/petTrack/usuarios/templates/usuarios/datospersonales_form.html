@@ -1,18 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
 {% block titulo %}
-<<<<<<< HEAD
-    {{ accion }} 
+    {{ accion }}
 {% endblock titulo %}
 
 {% block encabezado %}
     {{ accion }} Datos del usuario: {{ request.user }} 
-=======
-    {{ accion }} Perfil
-{% endblock titulo %}
-
-{% block encabezado %}
-    <!-- Encabezado de la página -->
-    {{ accion }} Datos del usuario: {{ request.user }}
->>>>>>> fa33838cd8758d2a64dde826f36ca23886cf39c9
 {% endblock encabezado %}
 
 {% block contenido %}
@@ -28,10 +21,7 @@
                             {{ form.as_p }}
                             <div class="row mt-3">
                                 <div class="col-md-6">
-<<<<<<< HEAD
-=======
                                     <!-- Botón para guardar los cambios -->
->>>>>>> fa33838cd8758d2a64dde826f36ca23886cf39c9
                                     <button class="btn btn-dark btn-block" type="submit">Guardar</button>
                                 </div>
                                 <div class="col-md-6">
