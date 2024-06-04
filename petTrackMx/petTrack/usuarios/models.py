@@ -36,7 +36,12 @@ class Location(models.Model):
     """
     lat = models.FloatField(verbose_name='Latitud')
     lng = models.FloatField(verbose_name='Longitud')
-
+    numero_telefono = models.IntegerField(
+        "Número de Teléfono para el arduino",
+        null=True,
+        blank=True,
+        unique=True,
+    )
     class Meta:
         verbose_name = 'Ubicación'
         verbose_name_plural = 'Ubicaciones'
@@ -46,4 +51,4 @@ class Location(models.Model):
         """
         Retorna una representación legible del objeto Location.
         """
-        return f"Latitud: {self.lat}, Longitud: {self.lng}"
+        return f"Latitud: {self.lat}, Longitud: {self.lng} , Telefono_arduino: {self.numero_telefono}"

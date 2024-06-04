@@ -15,7 +15,6 @@ class Mascota(models.Model):
     edad = models.IntegerField()
     numero_telefono = models.IntegerField(
         "Número de Teléfono para el arduino",
-        max_length=10,
         unique=True,
     )
 

@@ -25,6 +25,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.views.decorators.http import require_GET
+from .models import Location
 
 class BienvenidaView(TemplateView):
     """
@@ -249,14 +250,47 @@ def arduino_view(request):
     context = {'arduino_message': message}
     return homepage(request)
 
+#@csrf_exempt
+#def arduino_data(request):
+#    if request.method == "POST":
+#        try:
+#            data = json.loads(request.body)
+#            # Procesa los datos aquí
+#            print(f"Datos recibidos: {data}")
+#            return JsonResponse({"status": "success", "message": "Datos recibidos correctamente"})
+#        except json.JSONDecodeError:
+#            return JsonResponse({"status": "error", "message": "JSON no válido"}, status=400)
+#    else:
+#        return JsonResponse({"status": "error", "message": "Método no permitido"}, status=405)
+
 @csrf_exempt
 def arduino_data(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            # Procesa los datos aquí
+            latitude = data.get('latitude')
+            longitude = data.get('longitude')
+            phone_number = data.get('phone')
+            
+            if latitude is None or longitude is None or phone_number is None:
+                return JsonResponse({"status": "error", "message": "Datos faltantes"}, status=400)
+
+            # Imprimir los datos recibidos en la consola
             print(f"Datos recibidos: {data}")
-            return JsonResponse({"status": "success", "message": "Datos recibidos correctamente"})
+
+            # Verifica si ya existe una ubicación con el número de teléfono proporcionado
+            location, created = Location.objects.update_or_create(
+                numero_telefono=phone_number,
+                defaults={'lat': latitude, 'lng': longitude}
+            )
+
+            if created:
+                message = "Ubicación creada correctamente"
+            else:
+                message = "Ubicación actualizada correctamente"
+
+            return JsonResponse({"status": "success", "message": message})
+
         except json.JSONDecodeError:
             return JsonResponse({"status": "error", "message": "JSON no válido"}, status=400)
     else:
