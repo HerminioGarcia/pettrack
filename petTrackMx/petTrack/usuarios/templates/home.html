@@ -31,21 +31,10 @@ Localización de mascotas
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-        <p class="lead">Estas son tus Mascotas</p>
-        <ol class="list-group">
-            {% for location in locations %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="ms-2 me-auto">
-                    <div class="fw-bold">Lat: {{ location.lat }}, Lng: {{ location.lng }}</div>
-                </div>
-            </li>
-            {% endfor %}
-        </ol>
-    </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         {{ map|safe }}
     </div>
 </div>
 
 {% endblock contenido %}
+

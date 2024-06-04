@@ -26,6 +26,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.views.decorators.http import require_GET
 from .models import Location
+from mascota.models import Mascota
 
 class BienvenidaView(TemplateView):
     """
@@ -223,23 +224,45 @@ class EditarPerfilView(LoginRequiredMixin, UpdateView):
         """
         return self.request.user.datos
 
+@login_required
 def homepage(request):
     """
     Vista para mostrar el mapa con ubicaciones.
     """
-    locations = Location.objects.all()
-    initialMap = folium.Map(location=[22.768345351549794, -102.59867657968344], zoom_start=11)
+    # Obtener las mascotas del usuario autenticado
+    mascotas_usuario = Mascota.objects.filter(user=request.user)
 
-    marker_cluster = MarkerCluster().add_to(initialMap)
-    for location in locations:
-        coordinates = (location.lat, location.lng)
-        folium.Marker(
-            coordinates,
-            popup='Mascota',
-            icon=folium.Icon(icon='paw', prefix='fa')  # Icono de una pata
-        ).add_to(marker_cluster)
+    # Verificar si el usuario tiene mascotas
+    if mascotas_usuario.exists():
+        # Si el usuario tiene mascotas, obtener sus números de teléfono
+        numeros_telefono_usuario = [mascota.numero_telefono for mascota in mascotas_usuario]
+        # Filtrar las ubicaciones basadas en los números de teléfono de las mascotas del usuario
+        locations = Location.objects.filter(numero_telefono__in=numeros_telefono_usuario)
 
-    context = {'map': initialMap._repr_html_(), 'locations': locations}
+        # Crear un diccionario para almacenar las ubicaciones de cada mascota del usuario
+        ubicaciones_mascotas = {}
+        for location in locations:
+            ubicaciones_mascotas[location.numero_telefono] = location
+
+        initialMap = folium.Map(location=[22.768345351549794, -102.59867657968344], zoom_start=11)
+        marker_cluster = MarkerCluster().add_to(initialMap)
+
+        for mascota in mascotas_usuario:
+            # Obtener la ubicación de la mascota
+            location = ubicaciones_mascotas.get(mascota.numero_telefono)
+            if location:
+                coordinates = (location.lat, location.lng)
+                folium.Marker(
+                    coordinates,
+                    popup=f"Mascota: {mascota.nombre} (Lat: {location.lat}, Lng: {location.lng}) (Teléfono: {mascota.numero_telefono})",
+                    icon=folium.Icon(icon='paw', prefix='fa')  # Icono de una pata
+                ).add_to(marker_cluster)
+
+        context = {'map': initialMap._repr_html_(), 'mascotas': mascotas_usuario}
+    else:
+        # Si el usuario no tiene mascotas, mostrar un mensaje de error o un mensaje informativo
+        context = {'error_message': 'No tienes mascotas registradas'}
+
     return render(request, 'home.html', context)
 
 # Nueva vista para manejar mensajes del Arduino
