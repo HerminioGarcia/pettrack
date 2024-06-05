@@ -14,13 +14,16 @@ def step_impl(context):
     password_input.send_keys("tu_contraseña")
     context.driver.find_element_by_name("login").click()
 
+
 @when('el administrador ingresa a la url "http://localhost:8000/admin"')
 def step_impl(context):
     context.driver.get("http://localhost:8000/admin")
 
+
 @when('navega en la página de usuarios')
 def step_impl(context):
     context.driver.find_element_by_link_text("Usuarios").click()
+
 
 @then('el administrador debería ver la lista de todos los usuarios')
 def step_impl(context):
@@ -29,6 +32,7 @@ def step_impl(context):
     )
     user_list = context.driver.find_element_by_xpath("//table[@id='result_list']")
     assert user_list.text != ""
+
 
 @given('el administrador ha iniciado sesión en el panel de administración')
 def step_impl(context):
@@ -40,14 +44,17 @@ def step_impl(context):
     password_input.send_keys("tu_contraseña")
     context.driver.find_element_by_name("login").click()
 
+
 @when('el administrador está en la página de usuarios')
 def step_impl(context):
     context.driver.find_element_by_link_text("Usuarios").click()
+
 
 @when('el administrador hace clic en un usuario')
 def step_impl(context):
     user_list = context.driver.find_elements_by_xpath("//table[@id='result_list']//tr")
     user_list[1].find_element_by_tag_name("a").click()
+
 
 @then('el administrador debería ver los detalles de ese usuario')
 def step_impl(context):
