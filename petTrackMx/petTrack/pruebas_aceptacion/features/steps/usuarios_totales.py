@@ -4,14 +4,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-@given('el administrador ha iniciado sesión en el panel de administración')
+@given('que el administrador ha iniciado sesión en el panel de administración caso usuarios totales 1')
 def step_impl(context):
     context.driver = webdriver.Chrome()
     context.driver.get("http://localhost:8000/admin")
     username_input = context.driver.find_element_by_name("username")
     password_input = context.driver.find_element_by_name("password")
-    username_input.send_keys("tu_usuario")
-    password_input.send_keys("tu_contraseña")
+    username_input.send_keys("minitros555")
+    password_input.send_keys("chile10203986")
     context.driver.find_element_by_name("login").click()
 
 
@@ -34,15 +34,10 @@ def step_impl(context):
     assert user_list.text != ""
 
 
-@given('el administrador ha iniciado sesión en el panel de administración')
+@given('que el administrador ha iniciado sesión en el panel de administración caso usuarios totales 2')
 def step_impl(context):
     context.driver = webdriver.Chrome()
     context.driver.get("http://localhost:8000/admin")
-    username_input = context.driver.find_element_by_name("username")
-    password_input = context.driver.find_element_by_name("password")
-    username_input.send_keys("tu_usuario")
-    password_input.send_keys("tu_contraseña")
-    context.driver.find_element_by_name("login").click()
 
 
 @when('el administrador está en la página de usuarios')

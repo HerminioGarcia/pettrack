@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
-@given('que el navegador está abierto')
+@given('que el navegador está abierto caso agregar 1')
 def step_impl(context):
     context.driver = webdriver.Chrome()
 
@@ -16,8 +16,8 @@ def step_impl(context, correo):
     context.driver.get("https://mail.google.com")
     username_input = context.driver.find_element_by_name("Email")
     password_input = context.driver.find_element_by_name("Passwd")
-    username_input.send_keys("tu_usuario@gmail.com")
-    password_input.send_keys("tu_contraseña")
+    username_input.send_keys("Spartanpro0637@gmail.com")
+    password_input.send_keys("Prolyc0637")
     search_input = context.driver.find_element_by_name("q")
     search_input.send_keys(correo)
     search_input.send_keys(Keys.RETURN)
@@ -32,7 +32,7 @@ def step_impl(context, correo):
     assert correo in email_element.text
 
 
-@given('que el navegador está abierto')
+@given('que el navegador está abierto caso agregar 2')
 def step_impl(context):
     context.driver = webdriver.Chrome()
 
@@ -42,8 +42,8 @@ def step_impl(context, correo):
     context.driver.get("https://mail.google.com")
     username_input = context.driver.find_element_by_name("Email")
     password_input = context.driver.find_element_by_name("Passwd")
-    username_input.send_keys("tu_usuario@gmail.com")
-    password_input.send_keys("contraseña_incorrecta")
+    username_input.send_keys("Spartanpro0637@gmail.com")
+    password_input.send_keys("Prolyc04637")
     search_input = context.driver.find_element_by_name("q")
     search_input.send_keys(correo)
     search_input.send_keys(Keys.RETURN)
