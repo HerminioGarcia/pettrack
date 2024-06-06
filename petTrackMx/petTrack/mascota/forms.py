@@ -1,6 +1,7 @@
 from django import forms
 from .models import Mascota
 
+
 class MascotaForm(forms.ModelForm):
     """
     Formulario para crear y editar mascotas.
@@ -9,14 +10,20 @@ class MascotaForm(forms.ModelForm):
     """
     class Meta:
         model = Mascota
-        exclude = ['user']  # Excluye el campo 'user' para que no se muestre en el formulario
+        # Excluye el campo 'user' para que no se muestre en el formulario
+        exclude = ['user']
         fields = '__all__'  # Incluye todos los campos del modelo Mascota en el formulario
 
         # Define widgets personalizados para cada campo del formulario
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control'}),  # Text input con clase 'form-control'
-            'especie': forms.TextInput(attrs={'class': 'form-control'}),  # Text input con clase 'form-control'
-            'raza': forms.TextInput(attrs={'class': 'form-control'}),  # Text input con clase 'form-control'
-            'edad': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input con clase 'form-control'
-            'numero_telefono': forms.NumberInput(attrs={'class': 'form-control'}),  # Text input con clase 'form-control' y longitud máxima de 10
+            # Text input con clase 'form-control'
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            # Text input con clase 'form-control'
+            'especie': forms.TextInput(attrs={'class': 'form-control'}),
+            # Text input con clase 'form-control'
+            'raza': forms.TextInput(attrs={'class': 'form-control'}),
+            # Number input con clase 'form-control'
+            'edad': forms.NumberInput(attrs={'class': 'form-control'}),
+            # Text input con clase 'form-control' y longitud máxima de 10
+            'numero_telefono': forms.NumberInput(attrs={'class': 'form-control'}),
         }

@@ -3,14 +3,19 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
+
 def validar_numero_telefono(valor):
     if len(valor) != 10 or not valor.isdigit():
-        raise ValidationError("El número de teléfono debe tener exactamente 10 dígitos.")
+        raise ValidationError(
+            "El número de teléfono debe tener exactamente 10 dígitos.")
+
 
 class Mascota(models.Model):
-    user = models.ForeignKey(User, verbose_name="Usuario", related_name='mascota_usuario', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name="Usuario",
+                             related_name='mascota_usuario', on_delete=models.CASCADE)
     nombre = models.CharField("Nombre de la mascota", max_length=300)
-    especie = models.CharField("Especie", max_length=300, null=True, blank=True)
+    especie = models.CharField(
+        "Especie", max_length=300, null=True, blank=True)
     raza = models.CharField('Raza', max_length=300, null=True, blank=True)
     edad = models.IntegerField()
     numero_telefono = models.IntegerField(
@@ -44,4 +49,3 @@ class Mascota(models.Model):
         mensaje = f'Hola {self.user.username},\n\nTu mascota {self.nombre} ha sido eliminada con éxito.'
         correo_destino = [self.user.email]
         send_mail(asunto, mensaje, None, correo_destino)
-
