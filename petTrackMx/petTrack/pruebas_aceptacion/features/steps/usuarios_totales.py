@@ -58,3 +58,17 @@ def step_impl(context):
     )
     user_details = context.driver.find_element_by_xpath("//h1[@id='change-form']")
     assert user_details.text != ""
+
+@given(u'al estar en la ventana de correo verificado ingreso mi usuario "Pruebas" y mi contraseña "testing1234"')
+def step_impl(context):
+    raise NotImplementedError(u'STEP: Given al estar en la ventana de correo verificado ingreso mi usuario "Pruebas" y mi contraseña "testing1234"')
+
+
+@then(u'puedo ver la ventana de localización de mascotas')
+def step_impl(context):
+    raise NotImplementedError(u'STEP: Then puedo ver la ventana de localización de mascotas')
+
+
+@given(u'el administrador está en la página de usuarios')
+def step_impl(context):
+    raise NotImplementedError(u'STEP: Given el administrador está en la página de usuarios')

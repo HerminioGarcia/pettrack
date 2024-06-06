@@ -6,53 +6,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
-@given('que el navegador está abierto caso agregar 1')
+
+@given(u'cuando presiono el boton el correo de verificación de agregacion')
 def step_impl(context):
-    context.driver = webdriver.Chrome()
+    context.driver.find_element(By.XPATH, '//*[@id="MailList"]/div/div/div/div/div/div/div/div[2]').click()
+    time.sleep(2)
 
 
-@when('navego a Gmail e ingreso mi correo electrónico y contraseña y busco "{correo}"')
-def step_impl(context, correo):
-    context.driver.get("https://mail.google.com")
-    username_input = context.driver.find_element_by_name("Email")
-    password_input = context.driver.find_element_by_name("Passwd")
-    username_input.send_keys("Spartanpro0637@gmail.com")
-    password_input.send_keys("Prolyc0637")
-    search_input = context.driver.find_element_by_name("q")
-    search_input.send_keys(correo)
-    search_input.send_keys(Keys.RETURN)
-
-
-@then('debería ver el correo electrónico "{correo}"')
-def step_impl(context, correo):
-    WebDriverWait(context.driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//div[@class='yW']"))
-    )
-    email_element = context.driver.find_element_by_xpath("//div[@class='yW']")
-    assert correo in email_element.text
-
-
-@given('que el navegador está abierto caso agregar 2')
+@then(u'puedo ver la mascota ha sido agregada correctamente')
 def step_impl(context):
-    context.driver = webdriver.Chrome()
-
-
-@when('navego a Gmail e ingreso mi correo electrónico y contraseña incorrectamente y busco "{correo}"')
-def step_impl(context, correo):
-    context.driver.get("https://mail.google.com")
-    username_input = context.driver.find_element_by_name("Email")
-    password_input = context.driver.find_element_by_name("Passwd")
-    username_input.send_keys("Spartanpro0637@gmail.com")
-    password_input.send_keys("Prolyc04637")
-    search_input = context.driver.find_element_by_name("q")
-    search_input.send_keys(correo)
-    search_input.send_keys(Keys.RETURN)
-
-
-@then('debería ver un mensaje de error')
-def step_impl(context):
-    WebDriverWait(context.driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//div[@class='yW']"))
-    )
-    error_element = context.driver.find_element_by_xpath("//div[@class='yW']")
-    assert "Error" in error_element.text
+    time.sleep(5)

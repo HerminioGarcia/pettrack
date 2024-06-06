@@ -5,7 +5,7 @@ Característica: Inicio de Sesión
 
   Escenario: Credenciales validas
   Dado que ingreso a la url "http://localhost:8000/entrar?next=/"
-  Y escribo mi usuario "adolfo" y mi contraseña "adolfo123"
+  Y escribo mi usuario "minitros555" y mi contraseña "chile10203986"
   Cuando presiono el botón de iniciar
   Entonces puedo ver que pude entrar exitosamente a la pagina de "adolfo"
 
@@ -14,3 +14,5 @@ Característica: Inicio de Sesión
   Y escribo mi usuario incorrecto "usuario-incorrecto" y mi password incorrecta "incorrecto" 
   Cuando presiono el botón de iniciar
   Entonces puedo ver "Contraseña y/o Equipo incorrecto."
+
+  

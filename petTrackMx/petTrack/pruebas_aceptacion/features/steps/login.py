@@ -25,6 +25,7 @@ def step_impl(context, username, password):
 
 @when(u'presiono el botón de iniciar')
 def step_impl(context):
+    time.sleep(5)
     
     context.driver.find_element(By.ID, 'inicio').click()
     
