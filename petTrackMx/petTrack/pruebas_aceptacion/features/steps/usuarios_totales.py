@@ -15,7 +15,7 @@ def step_impl(context):
     context.driver.find_element_by_name("login").click()
 
 
-@when('el administrador ingresa a la url "http://localhost:8000/admin"')
+@when('el administrador ingresa a la url "http://localhost:8000/admin" para ver los usuarios')
 def step_impl(context):
     context.driver.get("http://localhost:8000/admin")
 
