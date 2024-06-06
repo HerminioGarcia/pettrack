@@ -25,14 +25,15 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.views.decorators.http import require_GET
-from .models import Location
 from mascota.models import Mascota
+
 
 class BienvenidaView(TemplateView):
     """
     Vista para mostrar la página de bienvenida.
     """
     template_name = 'bienvenida.html'
+
 
 class CustomPasswordResetView(PasswordResetView):
     """
@@ -47,7 +48,8 @@ class CustomPasswordResetView(PasswordResetView):
         Envía el correo electrónico de restablecimiento de contraseña.
         """
         subject = render_to_string(subject_template_name, context)
-        subject = ''.join(subject.splitlines())  # Elimina líneas en blanco de la cadena
+        # Elimina líneas en blanco de la cadena
+        subject = ''.join(subject.splitlines())
 
         # Obtén los datos necesarios para el enlace de restablecimiento
         protocol = self.request.scheme  # 'http' o 'https'
@@ -70,12 +72,14 @@ class CustomPasswordResetView(PasswordResetView):
         email = EmailMessage(subject, message, from_email, [to_email])
         email.send()
 
+
 class LoginView(LoginView):
     """
     Vista para manejar el inicio de sesión de usuarios.
     """
     template_name = 'login.html'
     form_class = AuthenticationForm
+
 
 class RegistrarView(SuccessMessageMixin, CreateView):
     """
@@ -92,7 +96,8 @@ class RegistrarView(SuccessMessageMixin, CreateView):
         """
         # Validación de correo electrónico único
         if User.objects.filter(email=form.cleaned_data['email']).exists():
-            messages.error(self.request, 'Este correo electrónico ya está en uso.')
+            messages.error(
+                self.request, 'Este correo electrónico ya está en uso.')
             return self.form_invalid(form)
 
         user = form.save(commit=False)
@@ -124,10 +129,12 @@ class RegistrarView(SuccessMessageMixin, CreateView):
 
         return super().form_valid(form)
 
+
 class ActivarCuentaView(TemplateView):
     """
     Vista para activar la cuenta del usuario.
     """
+
     def get(self, request, *args, **kwargs):
         """
         Maneja la activación de la cuenta del usuario mediante un token.
@@ -144,9 +151,11 @@ class ActivarCuentaView(TemplateView):
             user.save()
             messages.success(request, 'Cuenta activada, ingresar datos')
         else:
-            messages.error(request, 'Token inválido, contacta al administrador')
+            messages.error(
+                request, 'Token inválido, contacta al administrador')
 
         return redirect('login')
+
 
 class ListaUsuariosView(LoginRequiredMixin, ListView):
     """
@@ -163,6 +172,7 @@ class ListaUsuariosView(LoginRequiredMixin, ListView):
         context['grupos'] = Group.objects.all()
         return context
 
+
 @login_required
 def eliminar_usuario(request, id):
     """
@@ -170,6 +180,7 @@ def eliminar_usuario(request, id):
     """
     User.objects.get(id=id).delete()
     return redirect('lista')
+
 
 @login_required
 def asignar_grupos(request):
@@ -185,6 +196,7 @@ def asignar_grupos(request):
             usuario.groups.add(grupo)
     messages.success(request, 'Se agregó el usuario a los grupos')
     return redirect('lista')
+
 
 class CrearPerfilView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     """
@@ -203,6 +215,7 @@ class CrearPerfilView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         datos_personales.user = self.request.user
         datos_personales.save()
         return super().form_valid(form)
+
 
 class EditarPerfilView(LoginRequiredMixin, UpdateView):
     """
@@ -224,6 +237,7 @@ class EditarPerfilView(LoginRequiredMixin, UpdateView):
         """
         return self.request.user.datos
 
+
 @login_required
 def homepage(request):
     """
@@ -235,16 +249,19 @@ def homepage(request):
     # Verificar si el usuario tiene mascotas
     if mascotas_usuario.exists():
         # Si el usuario tiene mascotas, obtener sus números de teléfono
-        numeros_telefono_usuario = [mascota.numero_telefono for mascota in mascotas_usuario]
+        numeros_telefono_usuario = [
+            mascota.numero_telefono for mascota in mascotas_usuario]
         # Filtrar las ubicaciones basadas en los números de teléfono de las mascotas del usuario
-        locations = Location.objects.filter(numero_telefono__in=numeros_telefono_usuario)
+        locations = Location.objects.filter(
+            numero_telefono__in=numeros_telefono_usuario)
 
         # Crear un diccionario para almacenar las ubicaciones de cada mascota del usuario
         ubicaciones_mascotas = {}
         for location in locations:
             ubicaciones_mascotas[location.numero_telefono] = location
 
-        initialMap = folium.Map(location=[22.768345351549794, -102.59867657968344], zoom_start=11)
+        initialMap = folium.Map(
+            location=[22.768345351549794, -102.59867657968344], zoom_start=11)
         marker_cluster = MarkerCluster().add_to(initialMap)
 
         for mascota in mascotas_usuario:
@@ -255,10 +272,12 @@ def homepage(request):
                 folium.Marker(
                     coordinates,
                     popup=f"Mascota: {mascota.nombre} (Lat: {location.lat}, Lng: {location.lng}) (Teléfono: {mascota.numero_telefono})",
-                    icon=folium.Icon(icon='paw', prefix='fa')  # Icono de una pata
+                    # Icono de una pata
+                    icon=folium.Icon(icon='paw', prefix='fa')
                 ).add_to(marker_cluster)
 
-        context = {'map': initialMap._repr_html_(), 'mascotas': mascotas_usuario}
+        context = {'map': initialMap._repr_html_(),
+                   'mascotas': mascotas_usuario}
     else:
         # Si el usuario no tiene mascotas, mostrar un mensaje de error o un mensaje informativo
         context = {'error_message': 'No tienes mascotas registradas'}
@@ -266,15 +285,17 @@ def homepage(request):
     return render(request, 'home.html', context)
 
 # Nueva vista para manejar mensajes del Arduino
+
+
 @require_GET
 def arduino_view(request):
     message = request.GET.get('message', 'Hola no recibido')
     # Puedes agregar el mensaje al contexto de la vista 'homepage'
     context = {'arduino_message': message}
-    return homepage(request)
+    return homepage(request, context)
 
-#@csrf_exempt
-#def arduino_data(request):
+# @csrf_exempt
+# def arduino_data(request):
 #    if request.method == "POST":
 #        try:
 #            data = json.loads(request.body)
@@ -286,6 +307,7 @@ def arduino_view(request):
 #    else:
 #        return JsonResponse({"status": "error", "message": "Método no permitido"}, status=405)
 
+
 @csrf_exempt
 def arduino_data(request):
     if request.method == "POST":
@@ -294,7 +316,7 @@ def arduino_data(request):
             latitude = data.get('latitude')
             longitude = data.get('longitude')
             phone_number = data.get('phone')
-            
+
             if latitude is None or longitude is None or phone_number is None:
                 return JsonResponse({"status": "error", "message": "Datos faltantes"}, status=400)
 

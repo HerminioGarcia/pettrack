@@ -5,6 +5,7 @@ from .forms import MascotaForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+
 @login_required
 def registrar_mascota(request):
     """
@@ -19,10 +20,12 @@ def registrar_mascota(request):
             mascota.user = request.user  # Asigna el usuario actual
             mascota.save()
             mascota.enviar_correo_registro()  # Envía el correo de registro
-            return redirect('mascotas_lista')  # Redirige a la lista de mascotas
+            # Redirige a la lista de mascotas
+            return redirect('mascotas_lista')
     else:
         form = MascotaForm()
     return render(request, 'registrar_mascota.html', {'form': form})
+
 
 class ListaConvocatoria(LoginRequiredMixin, ListView):
     """
@@ -41,6 +44,7 @@ class ListaConvocatoria(LoginRequiredMixin, ListView):
             # Si el usuario no pertenece al grupo 'Administrador', mostrar solo las mascotas del usuario actual
             return queryset.filter(user=self.request.user)
 
+
 @login_required
 def eliminar_mascota(request, id):
     """
@@ -51,6 +55,7 @@ def eliminar_mascota(request, id):
     mascota.delete()
     return redirect('mascotas_lista')
 
+
 @login_required
 def editar_mascota(request, id):
     """
@@ -58,7 +63,7 @@ def editar_mascota(request, id):
     """
     # Obtener la mascota a editar
     mascota = get_object_or_404(Mascota, id=id)
-    
+
     if request.method == 'POST':
         # Llenar el formulario con los datos de la mascota actualizados
         form = MascotaForm(request.POST, instance=mascota)
@@ -68,5 +73,5 @@ def editar_mascota(request, id):
     else:
         # Llenar el formulario con los datos de la mascota actual
         form = MascotaForm(instance=mascota)
-    
+
     return render(request, 'editar_mascota.html', {'form': form, 'mascota': mascota})
